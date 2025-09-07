@@ -204,13 +204,13 @@
 
         <div id="controls" class="w-full flex flex-col items-center space-y-4 mt-4 hidden">
             <div id="zoom-controls-container" class="w-full flex items-center justify-center max-w-sm">
-                <button id="zoom-out" class="p-2 bg-light-bg text-dark-text rounded-full transition-all duration-300 shadow border-2 border-transparent hover:border-main-red hover:text-main-red">
+                <button id="zoom-out" aria-label="Zoom out" class="p-2 bg-light-bg text-dark-text rounded-full transition-all duration-300 shadow border-2 border-transparent hover:border-main-red hover:text-main-red">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"/>
                     </svg>
                 </button>
                 <input type="range" id="zoom-slider" min="1.0" max="3.0" step="0.01" value="1.0" class="flex-grow mx-4">
-                <button id="zoom-in" class="p-2 bg-light-bg text-dark-text rounded-full transition-all duration-300 shadow border-2 border-transparent hover:border-main-red hover:text-main-red">
+                <button id="zoom-in" aria-label="Zoom in" class="p-2 bg-light-bg text-dark-text rounded-full transition-all duration-300 shadow border-2 border-transparent hover:border-main-red hover:text-main-red">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     </svg>
@@ -219,13 +219,13 @@
             
             <div id="filter-buttons" class="flex space-x-4 max-w-full">
                 <button data-filter="none" class="filter-button py-2 px-4 active">Normal</button>
-                <button data-filter="grayscale" class="filter-button py-2 px-4">Grayscale</button>
-                <button data-filter="sepia" class="filter-button py-2 px-4">Sepia</button>
-                <button data-filter="invert" class="filter-button py-2 px-4">Invert</button>
-                <button data-filter="vivid" class="filter-button py-2 px-4">Vivid</button>
-                <button data-filter="vintage" class="filter-button py-2 px-4">Vintage</button>
-                <button data-filter="noir" class="filter-button py-2 px-4">Noir</button>
-                <button data-filter="lomo" class="filter-button py-2 px-4">Lomo</button>
+                <button data-filter="grayscale" aria-label="Apply grayscale filter" class="filter-button py-2 px-4">Grayscale</button>
+                <button data-filter="sepia" aria-label="Apply sepia filter" class="filter-button py-2 px-4">Sepia</button>
+                <button data-filter="invert" aria-label="Apply invert filter" class="filter-button py-2 px-4">Invert</button>
+                <button data-filter="vivid" aria-label="Apply vivid filter" class="filter-button py-2 px-4">Vivid</button>
+                <button data-filter="vintage" aria-label="Apply vintage filter" class="filter-button py-2 px-4">Vintage</button>
+                <button data-filter="noir" aria-label="Apply noir filter" class="filter-button py-2 px-4">Noir</button>
+                <button data-filter="lomo" aria-label="Apply lomo filter" class="filter-button py-2 px-4">Lomo</button>
             </div>
         </div>
         
@@ -280,12 +280,18 @@
         let lastPointerX, lastPointerY;
         let activeFilter = 'none';
         
-        frame.src = 'frame.png';
-
+        // Load the frame image with error handling and a more informative message
         frame.onload = () => {
             fitCanvasToScreen();
             draw();
         };
+        frame.onerror = () => {
+            showMessage('Error', 'The photo frame failed to load. Please try refreshing the page or check your connection.');
+            console.error('Frame image failed to load.');
+            // Fallback for missing frame image
+            frame.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000"><rect width="100%" height="100%" fill="#EFEFEF"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="60" fill="#999">Frame not found</text></svg>';
+        };
+        frame.src = 'frame.png';
 
         function fitCanvasToScreen() {
             const container = document.querySelector('.canvas-container');
@@ -302,14 +308,16 @@
 
         function updatePhotoState() {
             if (!photo) return;
-            const canvasRatio = canvas.width / canvas.height;
-            const photoRatio = photoData.naturalWidth / photoData.naturalHeight;
+            // The canvas is always a square, so we can use a single dimension for calculations
+            const canvasSize = canvas.width;
             
+            const photoRatio = photoData.naturalWidth / photoData.naturalHeight;
             let scaleToCover;
-            if (photoRatio > canvasRatio) {
-                scaleToCover = canvas.height / photoData.naturalHeight;
-            } else {
-                scaleToCover = canvas.width / photoData.naturalWidth;
+
+            if (photoRatio > 1) { // Landscape photo
+                scaleToCover = canvasSize / photoData.naturalHeight;
+            } else { // Portrait or square photo
+                scaleToCover = canvasSize / photoData.naturalWidth;
             }
 
             photoData.drawnWidth = photoData.naturalWidth * photoData.scale;
@@ -360,14 +368,23 @@
                 finalCanvas.width = finalSize;
                 finalCanvas.height = finalSize;
 
-                // Determine the scale and position for the downloaded image
-                const scaleX = finalCanvas.width / canvas.width;
-                const scaleY = finalCanvas.height / canvas.height;
-                
-                const finalPhotoWidth = photoData.drawnWidth * scaleX;
-                const finalPhotoHeight = photoData.drawnHeight * scaleY;
-                const finalPhotoX = photoData.x * scaleX;
-                const finalPhotoY = photoData.y * scaleY;
+                // Calculate the aspect ratio of the photo to determine how to fit it
+                const photoAspect = photoData.naturalWidth / photoData.naturalHeight;
+                let finalPhotoWidth, finalPhotoHeight;
+
+                if (photoAspect > 1) { // Landscape
+                    finalPhotoWidth = finalSize * photoAspect;
+                    finalPhotoHeight = finalSize;
+                } else { // Portrait or Square
+                    finalPhotoWidth = finalSize;
+                    finalPhotoHeight = finalSize / photoAspect;
+                }
+
+                // Calculate the position on the final canvas based on the current preview position
+                const currentScale = photoData.drawnWidth / photoData.naturalWidth;
+                const finalScale = finalPhotoWidth / photoData.naturalWidth;
+                const finalPhotoX = photoData.x * (finalSize / canvas.width);
+                const finalPhotoY = photoData.y * (finalSize / canvas.height);
                 
                 finalCtx.filter = getFilterValue(activeFilter);
                 
@@ -375,8 +392,8 @@
                     photo,
                     finalPhotoX,
                     finalPhotoY,
-                    finalPhotoWidth, 
-                    finalPhotoHeight
+                    finalPhotoWidth * (photoData.scale / photoData.minScale),
+                    finalPhotoHeight * (photoData.scale / photoData.minScale)
                 );
                 
                 finalCtx.filter = 'none';
@@ -398,7 +415,8 @@
         
         photoUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
-            if (file) {
+            // Check if the file is an image
+            if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     photo = new Image();
@@ -422,13 +440,17 @@
                     photo.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            } else {
+                showMessage('Error', 'Please upload a valid image file (JPG, PNG, GIF, etc.).');
+                // Reset the input field so the user can try again
+                photoUpload.value = '';
             }
         });
 
         const zoomBy = (factor) => {
             if (!photo) return;
             const oldScale = photoData.scale;
-            const newScale = photoData.scale * factor;
+            let newScale = photoData.scale * factor;
             
             photoData.scale = Math.max(photoData.minScale, Math.min(3.0, newScale));
             zoomSlider.value = photoData.scale;
@@ -472,7 +494,9 @@
         filterButtons.forEach(button => {
             button.addEventListener('click', (e) => {
                 if (photo) {
+                    // Remove 'active' class from all buttons
                     filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add 'active' class to the clicked button
                     e.target.classList.add('active');
                     activeFilter = e.target.dataset.filter;
                     draw();
@@ -489,7 +513,7 @@
         }
         
         function isDraggable() {
-            return photoData.scale > photoData.minScale;
+            return photo && (photoData.drawnWidth > canvas.width || photoData.drawnHeight > canvas.height);
         }
 
         canvas.addEventListener('mousedown', (e) => {
