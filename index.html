@@ -8,15 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --scout-purple: rgb(80, 48, 129);
-            --bangladesh-scouts-green: rgb(0, 102, 51);
-            --wosm-blue: rgb(0, 56, 120);
-            --bright-red: rgb(204, 0, 0);
-            --light-blue: rgb(126, 156, 186);
-            --wosm-yellow: rgb(255, 204, 0);
-            --white: rgb(255, 255, 255);
-            --light-grey: rgb(240, 240, 240);
-            --dark-grey: rgb(50, 50, 50);
+            --bd-green: #006A4E;
+            --bd-red: #F42A41;
+            --white: #FFFFFF;
+            --dark-grey: #1E1E1E;
+            --light-grey: #DEDEDE;
         }
         body {
             font-family: 'Poppins', sans-serif;
@@ -28,32 +24,34 @@
         h1, h2, h3, h4, .font-heading {
             font-family: 'Montserrat', sans-serif;
         }
-        .scout-purple-gradient {
-            background: linear-gradient(135deg, #A855F7, #5A2A94);
-            transition: all 0.5s ease;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.7);
-        }
-        .bg-scout-purple { background-color: var(--scout-purple); }
-        .text-scout-purple { color: var(--scout-purple); }
-        .bg-bangladesh-scouts-green { background-color: var(--bangladesh-scouts-green); }
-        .text-bangladesh-scouts-green { color: var(--bangladesh-scouts-green); }
-        .bg-wosm-blue { background-color: var(--wosm-blue); }
-        .text-wosm-blue { color: var(--wosm-blue); }
-        .bg-bright-red { background-color: var(--bright-red); }
-        .text-bright-red { color: var(--bright-red); }
-        .bg-light-blue { background-color: var(--light-blue); }
-        .text-light-blue { color: var(--light-blue); }
-        .bg-wosm-yellow { background-color: var(--wosm-yellow); }
-        .text-wosm-yellow { color: var(--wosm-yellow); }
+        .bg-bd-green { background-color: var(--bd-green); }
+        .text-bd-green { color: var(--bd-green); }
+        .bg-bd-red { background-color: var(--bd-red); }
+        .text-bd-red { color: var(--bd-red); }
+        .bg-white { background-color: var(--white); }
+        .text-white { color: var(--white); }
         .bg-dark-grey { background-color: var(--dark-grey); }
         .text-dark-grey { color: var(--dark-grey); }
+
+        .header-bg {
+            background: linear-gradient(135deg, var(--bd-green), #009966);
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 106, 78, 0.7);
+            animation: gradient-animation 10s ease infinite;
+            border: 2px solid var(--bd-green);
+        }
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         .canvas-container {
             position: relative;
             width: 100%;
             aspect-ratio: 1 / 1;
             margin: auto;
-            border: 2px solid var(--wosm-blue);
-            box-shadow: 0 0 15px rgba(0, 56, 120, 0.7);
+            border: 2px solid var(--bd-red);
+            box-shadow: 0 0 15px rgba(244, 42, 65, 0.7);
             transition: all 0.3s ease;
         }
         #canvas {
@@ -74,25 +72,13 @@
             transform: translate(-50%, -50%);
             z-index: 1000;
         }
-        .header-bg-animation {
-            background-size: 200% 200%;
-            animation: gradient-animation 10s ease infinite;
-        }
-        @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .text-shadow-custom {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
         .link-button {
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             transform: scale(1);
         }
         .link-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px var(--wosm-blue);
+            box-shadow: 0 0 15px var(--bd-red);
         }
         .fade-in-up {
             opacity: 0;
@@ -105,10 +91,7 @@
         @keyframes fadeInUp {
             to { opacity: 1; transform: translateY(0); }
         }
-        .text-highlight {
-            color: var(--bright-red);
-        }
-        
+
         /* Slider Styles */
         #zoom-controls-container {
             display: flex;
@@ -119,12 +102,12 @@
             -webkit-appearance: none;
             width: 100%;
             height: 8px;
-            background: var(--dark-grey);
+            background: var(--light-grey);
             outline: none;
             opacity: 0.7;
             transition: opacity .2s;
             border-radius: 4px;
-            border: 1px solid var(--wosm-blue);
+            border: 1px solid var(--bd-green);
         }
         input[type=range]:hover {
             opacity: 1;
@@ -134,34 +117,34 @@
             appearance: none;
             width: 20px;
             height: 20px;
-            background: var(--wosm-blue);
+            background: var(--bd-red);
             cursor: pointer;
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--wosm-blue);
-            border: 2px solid var(--dark-grey);
+            box-shadow: 0 0 10px var(--bd-red);
+            border: 2px solid var(--white);
         }
         input[type=range]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: var(--wosm-blue);
+            background: var(--bd-red);
             cursor: pointer;
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--wosm-blue);
-            border: 2px solid var(--dark-grey);
+            box-shadow: 0 0 10px var(--bd-red);
+            border: 2px solid var(--white);
         }
         .zoom-button {
             background-color: var(--dark-grey);
-            color: var(--wosm-blue);
-            border: 2px solid var(--wosm-blue);
+            color: var(--bd-green);
+            border: 2px solid var(--bd-green);
             transition: all 0.3s;
             padding: 0.5rem;
             border-radius: 9999px;
-            box-shadow: 0 0 8px rgba(0, 56, 120, 0.5);
+            box-shadow: 0 0 8px rgba(0, 106, 78, 0.5);
         }
         .zoom-button:hover {
             transform: scale(1.1);
-            box-shadow: 0 0 15px var(--wosm-blue);
-            background-color: var(--wosm-blue);
+            box-shadow: 0 0 15px var(--bd-green);
+            background-color: var(--bd-green);
             color: var(--white);
         }
         .filter-button {
@@ -174,15 +157,15 @@
             border-radius: 9999px;
         }
         .filter-button:hover {
-            border-color: var(--scout-purple);
-            box-shadow: 0 0 8px var(--scout-purple);
-            color: var(--scout-purple);
+            border-color: var(--bd-green);
+            box-shadow: 0 0 8px var(--bd-green);
+            color: var(--bd-green);
         }
         .filter-button.active {
-            border-color: var(--bangladesh-scouts-green);
-            background-color: var(--bangladesh-scouts-green);
-            color: var(--dark-grey);
-            box-shadow: 0 0 10px var(--bangladesh-scouts-green);
+            border-color: var(--bd-red);
+            background-color: var(--bd-red);
+            color: var(--white);
+            box-shadow: 0 0 10px var(--bd-red);
         }
         #filter-buttons {
             display: flex;
@@ -198,7 +181,7 @@
             height: 6px;
         }
         #filter-buttons::-webkit-scrollbar-thumb {
-            background: var(--wosm-blue);
+            background: var(--bd-red);
             border-radius: 10px;
         }
         #filter-buttons::-webkit-scrollbar-track {
@@ -206,28 +189,30 @@
             border-radius: 10px;
         }
         .cta-button {
-            background-color: var(--bangladesh-scouts-green);
-            border: 2px solid var(--bangladesh-scouts-green);
-            color: var(--dark-grey);
+            background-color: var(--bd-green);
+            border: 2px solid var(--bd-green);
+            color: var(--white);
             transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 10px var(--bd-green);
         }
         .cta-button:hover {
-            box-shadow: 0 0 15px var(--bangladesh-scouts-green);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--bd-green);
             background-color: transparent;
-            color: var(--bangladesh-scouts-green);
+            color: var(--bd-green);
         }
         .download-button {
             transition: all 0.3s ease-in-out;
-            border: 2px solid var(--scout-purple);
-            background-color: var(--scout-purple);
+            border: 2px solid var(--bd-red);
+            background-color: var(--bd-red);
             color: var(--white);
-            box-shadow: 0 0 10px var(--scout-purple);
+            box-shadow: 0 0 10px var(--bd-red);
         }
         .download-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 20px var(--scout-purple);
+            box-shadow: 0 0 20px var(--bd-red);
             background-color: transparent;
-            color: var(--scout-purple);
+            color: var(--bd-red);
         }
         .download-button:active {
              transform: scale(1);
@@ -237,7 +222,7 @@
 <body class="min-h-screen flex flex-col items-center p-4">
 
 <main class="w-full h-full flex flex-col items-center">
-    <header class="text-center p-6 md:p-10 w-full scout-purple-gradient rounded-3xl shadow-2xl header-bg-animation flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
+    <header class="text-center p-6 md:p-10 w-full header-bg rounded-3xl shadow-2xl flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
         <img src="logo.png" alt="ICT Scout Jamboree 2025 Logo" class="h-24 w-auto object-contain mb-4 md:mb-0">
         <div class="flex flex-col items-center md:items-start text-white">
             <h1 class="text-4xl lg:text-5xl font-extrabold tracking-wide font-heading">Bangladesh Scouts</h1>
@@ -245,49 +230,49 @@
         </div>
     </header>
 
-    <section class="bg-dark-grey rounded-3xl p-6 md:p-10 mt-8 w-full max-w-4xl border border-scout-purple">
-        <h3 class="text-2xl md:text-3xl font-bold text-scout-purple text-center mb-4 fade-in-up font-heading">Ready to Dive into the Digital World? 🚀</h3>
+    <section class="bg-dark-grey rounded-3xl p-6 md:p-10 mt-8 w-full max-w-4xl border border-bd-green">
+        <h3 class="text-2xl md:text-3xl font-bold text-bd-green text-center mb-4 fade-in-up font-heading">Ready to Dive into the Digital World? 🚀</h3>
         <p class="text-light-grey text-base leading-relaxed text-center mx-auto mb-6 fade-in-up" style="animation-delay: 0.2s;">
             Gear up for an unforgettable journey at the 3rd National ICT Scout Jamboree 2025! We’re merging cutting-edge tech with the spirit of community at the National Scout Training Center — get ready for an adventure like no other!
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left mb-6">
             <div class="fade-in-up">
-                <p class="font-bold text-xl text-scout-purple mb-1 font-heading">When?</p>
+                <p class="font-bold text-xl text-bd-green mb-1 font-heading">When?</p>
                 <p class="text-light-grey">📅 19th–21st September 2025</p>
             </div>
             <div class="fade-in-up" style="animation-delay: 0.3s;">
-                <p class="font-bold text-xl text-scout-purple mb-1 font-heading">Where?</p>
+                <p class="font-bold text-xl text-bd-green mb-1 font-heading">Where?</p>
                 <p class="text-light-grey">📍 National Scout Training Center, Mouchak, Gazipur</p>
             </div>
             <div class="fade-in-up" style="animation-delay: 0.4s;">
-                <p class="font-bold text-xl text-scout-purple mb-1 font-heading">Our Vibe</p>
+                <p class="font-bold text-xl text-bd-green mb-1 font-heading">Our Vibe</p>
                 <p class="text-light-grey">“প্রযুক্তি হোক সবার / Let Technology Serve Humanity”</p>
             </div>
         </div>
         
-        <h4 class="font-bold text-2xl text-scout-purple text-center my-6 fade-in-up font-heading" style="animation-delay: 0.5s;">Why You Gotta Be There?</h4>
+        <h4 class="font-bold text-2xl text-bd-green text-center my-6 fade-in-up font-heading" style="animation-delay: 0.5s;">Why You Gotta Be There?</h4>
         <ul class="list-none space-y-4 max-w-2xl mx-auto text-left fade-in-up" style="animation-delay: 0.6s;">
             <li class="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-wosm-blue mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bd-red mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span class="text-light-grey text-base">Get hands-on at AI workshops and dive deep into the future!</span>
             </li>
             <li class="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-wosm-blue mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bd-red mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span class="text-light-grey text-base">Watch jaw-dropping Robotics demos and explore mind-blowing ICT projects.</span>
             </li>
             <li class="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-wosm-blue mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bd-red mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span class="text-light-grey text-base">Tons of fun activities and challenges that’ll keep you on your toes.</span>
             </li>
             <li class="flex items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-wosm-blue mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-bd-red mr-3 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span class="text-light-grey text-base">Meet new friends and build lasting connections.</span>
@@ -295,26 +280,26 @@
         </ul>
 
         <div class="flex flex-col md:flex-row justify-center items-center mt-6 space-y-4 md:space-y-0 md:space-x-8">
-            <a href="https://www.facebook.com/share/16ypNQm7uG/" target="_blank" class="link-button bg-wosm-blue text-white font-semibold py-3 px-8 rounded-full hover:bg-light-blue">
+            <a href="https://www.facebook.com/share/16ypNQm7uG/" target="_blank" class="link-button bg-bd-red text-white font-semibold py-3 px-8 rounded-full">
                 Check out the Event Page
             </a>
-            <a href="https://www.facebook.com/bangladeshscouts.NHQ" target="_blank" class="link-button bg-wosm-blue text-white font-semibold py-3 px-8 rounded-full hover:bg-light-blue">
+            <a href="https://www.facebook.com/bangladeshscouts.NHQ" target="_blank" class="link-button bg-bd-red text-white font-semibold py-3 px-8 rounded-full">
                 Visit our Facebook Page
             </a>
         </div>
     </section>
 
     <section class="text-center p-6 md:p-10 w-full">
-        <h3 class="text-2xl font-bold text-scout-purple mb-4 font-heading">How to Join the Fun:</h3>
+        <h3 class="text-2xl font-bold text-bd-green mb-4 font-heading">How to Join the Fun:</h3>
         <ul class="list-none text-light-grey space-y-3 max-w-xl mx-auto text-left md:text-center">
             <li>
-                <span class="font-semibold text-scout-purple">Step 1:</span> Click the "Upload Your Photo" button and select a pic from your device.
+                <span class="font-semibold text-bd-green">Step 1:</span> Click the "Upload Your Photo" button and select a pic from your device.
             </li>
             <li>
-                <span class="font-semibold text-scout-purple">Step 2:</span> Adjust your photo using the drag-and-zoom slider to make it just right.
+                <span class="font-semibold text-bd-green">Step 2:</span> Adjust your photo using the drag-and-zoom slider to make it just right.
             </li>
             <li>
-                <span class="font-semibold text-scout-purple">Step 3:</span> When it looks perfect, hit "Download Photo Frame" and save it!
+                <span class="font-semibold text-bd-green">Step 3:</span> When it looks perfect, hit "Download Photo Frame" and save it!
             </li>
         </ul>
     </section>
@@ -324,7 +309,7 @@
     </div>
 
     <section class="mt-8 flex flex-col items-center space-y-4 w-full max-w-2xl">
-        <label for="photo-upload" class="cursor-pointer cta-button font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:-translate-y-1">
+        <label for="photo-upload" class="cursor-pointer cta-button font-bold py-3 px-6 rounded-full transform hover:-translate-y-1">
             Upload Your Photo
         </label>
         <input type="file" id="photo-upload" accept="image/*" class="hidden">
@@ -356,15 +341,15 @@
             </div>
         </div>
         
-        <button id="download-btn" class="w-full max-w-xs download-button font-bold py-3 px-6 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+        <button id="download-btn" class="w-full max-w-xs download-button font-bold py-3 px-6 rounded-full transform hover:-translate-y-1">
             Download Photo Frame
         </button>
     </section>
 
-    <div id="message-box" class="message-box bg-dark-grey rounded-xl p-8 shadow-2xl text-center hidden border border-scout-purple">
-        <h3 id="message-title" class="text-2xl font-bold mb-4 font-heading text-scout-purple"></h3>
+    <div id="message-box" class="message-box bg-dark-grey rounded-xl p-8 shadow-2xl text-center hidden border border-bd-red">
+        <h3 id="message-title" class="text-2xl font-bold mb-4 font-heading text-bd-red"></h3>
         <p id="message-text" class="text-light-grey mb-6"></p>
-        <a id="close-message" href="https://www.facebook.com/profile.php" target="_blank" class="link-button bg-wosm-blue text-white font-semibold py-3 px-4 md:px-8 rounded-full">
+        <a id="close-message" href="https://www.facebook.com/profile.php" target="_blank" class="link-button bg-bd-red text-white font-semibold py-3 px-4 md:px-8 rounded-full">
             Make Profile Picture
         </a>
     </div>
