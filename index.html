@@ -355,16 +355,19 @@
                 const finalCanvas = document.createElement('canvas');
                 const finalCtx = finalCanvas.getContext('2d');
                 
-                // Use a standard resolution for the final image to ensure quality
-                finalCanvas.width = 1000;
-                finalCanvas.height = 1000;
+                // Set the final canvas to be a perfect square for a consistent output
+                const finalSize = 1000;
+                finalCanvas.width = finalSize;
+                finalCanvas.height = finalSize;
 
-                const displayToFinalRatio = finalCanvas.width / canvas.width; 
-
-                const finalPhotoWidth = photoData.drawnWidth * displayToFinalRatio;
-                const finalPhotoHeight = photoData.drawnHeight * displayToFinalRatio;
-                const finalPhotoX = photoData.x * displayToFinalRatio;
-                const finalPhotoY = photoData.y * displayToFinalRatio;
+                // Determine the scale and position for the downloaded image
+                const scaleX = finalCanvas.width / canvas.width;
+                const scaleY = finalCanvas.height / canvas.height;
+                
+                const finalPhotoWidth = photoData.drawnWidth * scaleX;
+                const finalPhotoHeight = photoData.drawnHeight * scaleY;
+                const finalPhotoX = photoData.x * scaleX;
+                const finalPhotoY = photoData.y * scaleY;
                 
                 finalCtx.filter = getFilterValue(activeFilter);
                 
