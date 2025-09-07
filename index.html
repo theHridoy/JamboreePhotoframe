@@ -66,7 +66,7 @@
             transform: scale(1);
         }
         .link-button:hover {
-            transform: 1.05);
+            transform: scale(1.05);
             background: var(--main-green);
             color: var(--light-bg);
         }
@@ -350,6 +350,49 @@
             }
         }
 
+        downloadBtn.addEventListener('click', () => {
+            if (photo) {
+                const finalCanvas = document.createElement('canvas');
+                const finalCtx = finalCanvas.getContext('2d');
+                
+                // Use a standard resolution for the final image to ensure quality
+                finalCanvas.width = 1000;
+                finalCanvas.height = 1000;
+
+                const displayToFinalRatio = finalCanvas.width / canvas.width; 
+
+                const finalPhotoWidth = photoData.drawnWidth * displayToFinalRatio;
+                const finalPhotoHeight = photoData.drawnHeight * displayToFinalRatio;
+                const finalPhotoX = photoData.x * displayToFinalRatio;
+                const finalPhotoY = photoData.y * displayToFinalRatio;
+                
+                finalCtx.filter = getFilterValue(activeFilter);
+                
+                finalCtx.drawImage(
+                    photo,
+                    finalPhotoX,
+                    finalPhotoY,
+                    finalPhotoWidth, 
+                    finalPhotoHeight
+                );
+                
+                finalCtx.filter = 'none';
+
+                finalCtx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
+
+                const link = document.createElement('a');
+                link.download = 'ICT_Scout_Jamboree_2025_Photo_Frame.png';
+                link.href = finalCanvas.toDataURL('image/png', 1.0);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showMessage('Awesome!', 'Your new photo is ready to share. Click the button to set it as your profile picture!');
+            } else {
+                showMessage('Oops!', 'Please upload a photo first!');
+            }
+        });
+        
         photoUpload.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
@@ -434,47 +477,6 @@
             });
         });
 
-        downloadBtn.addEventListener('click', () => {
-            if (photo) {
-                const finalCanvas = document.createElement('canvas');
-                const finalCtx = finalCanvas.getContext('2d');
-                
-                finalCanvas.width = photoData.naturalWidth;
-                finalCanvas.height = photoData.naturalHeight;
-
-                const displayToFinalRatio = finalCanvas.width / canvas.width; 
-
-                const finalPhotoWidth = photoData.drawnWidth * displayToFinalRatio;
-                const finalPhotoHeight = photoData.drawnHeight * displayToFinalRatio;
-                const finalPhotoX = photoData.x * displayToFinalRatio;
-                const finalPhotoY = photoData.y * displayToFinalRatio;
-
-                finalCtx.filter = getFilterValue(activeFilter);
-                
-                finalCtx.drawImage(
-                    photo,
-                    finalPhotoX,
-                    finalPhotoY,
-                    finalPhotoWidth, 
-                    finalPhotoHeight
-                );
-                
-                finalCtx.filter = 'none';
-
-                finalCtx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
-
-                const link = document.createElement('a');
-                link.download = 'ICT_Scout_Jamboree_2025_Photo_Frame.png';
-                link.href = finalCanvas.toDataURL('image/png', 1.0);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                showMessage('Awesome!', 'Your new photo is ready to share. Click the button to set it as your profile picture!');
-            } else {
-                showMessage('Oops!', 'Please upload a photo first!');
-            }
-        });
 
         function getPointerPos(e) {
             if (e.touches && e.touches.length > 0) {
