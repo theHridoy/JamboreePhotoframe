@@ -104,7 +104,7 @@
             color: var(--bright-red);
         }
         
-        /* Slider and Button Styles */
+        /* Slider Styles */
         #zoom-controls-container {
             display: flex;
             align-items: center;
@@ -276,7 +276,7 @@
                 <span class="font-semibold text-scout-purple">Step 1:</span> Click the "Upload Your Photo" button and select a pic from your device.
             </li>
             <li>
-                <span class="font-semibold text-scout-purple">Step 2:</span> Adjust your photo using the drag-and-zoom slider to make it just right.
+                <span class="font-semibold text-scout-purple">Step 2:</span> **Drag the photo with your mouse or finger** and use the zoom controls to adjust the view.
             </li>
             <li>
                 <span class="font-semibold text-scout-purple">Step 3:</span> When it looks perfect, hit "Download Photo Frame" and save it!
@@ -372,11 +372,6 @@
         let lastPointerX, lastPointerY;
         let activeFilter = 'none';
         
-        // Touch state for pinch-to-zoom
-        let isPinching = false;
-        let initialDistance = 0;
-        let initialScale = 1.0;
-
         frame.onload = () => {
             fitCanvasToScreen();
             draw();
@@ -412,11 +407,7 @@
             photoData.drawnHeight = photoData.naturalHeight * photoData.scale * scaleToCover;
             
             photoData.minScale = scaleToCover;
-
-            if (photoData.scale < photoData.minScale) {
-                photoData.scale = photoData.minScale;
-                zoomSlider.value = photoData.minScale;
-            }
+            zoomSlider.min = photoData.minScale;
         }
         
         function draw() {
@@ -479,19 +470,16 @@
             const oldScale = photoData.scale;
             const newScale = photoData.scale * factor;
             
-            // Only allow zoom if new scale is greater than minScale
-            if (newScale >= photoData.minScale) {
-                photoData.scale = Math.min(3.0, newScale);
-                zoomSlider.value = photoData.scale;
+            photoData.scale = Math.max(photoData.minScale, Math.min(3.0, newScale));
+            zoomSlider.value = photoData.scale;
+            
+            const zoomFactor = photoData.scale / oldScale;
+            photoData.x = canvas.width / 2 - (canvas.width / 2 - photoData.x) * zoomFactor;
+            photoData.y = canvas.height / 2 - (canvas.height / 2 - photoData.y) * zoomFactor;
 
-                const zoomFactor = photoData.scale / oldScale;
-                photoData.x = canvas.width / 2 - (canvas.width / 2 - photoData.x) * zoomFactor;
-                photoData.y = canvas.height / 2 - (canvas.height / 2 - photoData.y) * zoomFactor;
-
-                updatePhotoState();
-                constrainPhotoPosition();
-                draw();
-            }
+            updatePhotoState();
+            constrainPhotoPosition();
+            draw();
         };
 
         zoomInBtn.addEventListener('click', () => zoomBy(1.1));
@@ -586,7 +574,7 @@
         }
 
         canvas.addEventListener('mousedown', (e) => {
-            if (isDraggable()) {
+            if (photo) {
                 isDragging = true;
                 const pos = getPointerPos(e);
                 lastPointerX = pos.x;
@@ -595,7 +583,7 @@
             }
         });
         canvas.addEventListener('touchstart', (e) => {
-            if (isDraggable() && e.touches.length === 1) {
+            if (photo && e.touches.length === 1) {
                 isDragging = true;
                 const pos = getPointerPos(e);
                 lastPointerX = pos.x;
@@ -613,7 +601,6 @@
                 photoData.y += dy;
                 lastPointerX = pos.x;
                 lastPointerY = pos.y;
-                constrainPhotoPosition();
                 draw();
             }
         });
@@ -626,7 +613,6 @@
                 photoData.y += dy;
                 lastPointerX = pos.x;
                 lastPointerY = pos.y;
-                constrainPhotoPosition();
                 draw();
             }
         });
