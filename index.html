@@ -276,7 +276,7 @@
                 <span class="font-semibold text-scout-purple">Step 1:</span> Click the "Upload Your Photo" button and select a pic from your device.
             </li>
             <li>
-                <span class="font-semibold text-scout-purple">Step 2:</span> **Drag the photo with your mouse or finger** and use the zoom controls to adjust the view.
+                <span class="font-semibold text-scout-purple">Step 2:</span> Adjust your photo using the drag-and-zoom slider to make it just right.
             </li>
             <li>
                 <span class="font-semibold text-scout-purple">Step 3:</span> When it looks perfect, hit "Download Photo Frame" and save it!
@@ -408,6 +408,11 @@
             
             photoData.minScale = scaleToCover;
             zoomSlider.min = photoData.minScale;
+
+            if (photoData.scale < photoData.minScale) {
+                photoData.scale = photoData.minScale;
+                zoomSlider.value = photoData.minScale;
+            }
         }
         
         function draw() {
@@ -574,7 +579,7 @@
         }
 
         canvas.addEventListener('mousedown', (e) => {
-            if (photo) {
+            if (isDraggable()) {
                 isDragging = true;
                 const pos = getPointerPos(e);
                 lastPointerX = pos.x;
@@ -583,7 +588,7 @@
             }
         });
         canvas.addEventListener('touchstart', (e) => {
-            if (photo && e.touches.length === 1) {
+            if (isDraggable() && e.touches.length === 1) {
                 isDragging = true;
                 const pos = getPointerPos(e);
                 lastPointerX = pos.x;
@@ -601,6 +606,7 @@
                 photoData.y += dy;
                 lastPointerX = pos.x;
                 lastPointerY = pos.y;
+                constrainPhotoPosition();
                 draw();
             }
         });
@@ -613,6 +619,7 @@
                 photoData.y += dy;
                 lastPointerX = pos.x;
                 lastPointerY = pos.y;
+                constrainPhotoPosition();
                 draw();
             }
         });
