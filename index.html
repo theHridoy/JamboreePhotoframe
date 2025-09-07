@@ -8,17 +8,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bangladesh-green: rgb(0, 106, 78); /* Bangladeshi flag green */
-            --bright-red: rgb(204, 0, 0); /* Cyberpunk red */
+            --bangladesh-green: rgb(0, 106, 78); /* Green of Bangladesh flag */
+            --bright-red: rgb(204, 0, 0); /* Neon red */
             --white: rgb(255, 255, 255);
             --black: rgb(0, 0, 0);
-            --neon-blue: rgb(0, 56, 120);
+            --neon-blue: rgb(0, 56, 120); /* Cyberpunk blue */
+            --dark-grey: rgb(24, 24, 24); /* Dark background */
+            --gold: rgb(255, 204, 0); /* Luxe gold */
         }
 
-        /* Base styling */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--black);
+            background-color: var(--dark-grey);
             color: var(--white);
             overflow-x: hidden;
         }
@@ -28,9 +29,10 @@
         }
 
         .neon-glow {
-            text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red), 0 0 30px var(--bright-red);
+            text-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red), 0 0 30px var(--bright-red), 0 0 40px var(--bright-red);
         }
 
+        /* Backgrounds */
         .bg-cyberpunk-red { background-color: var(--bright-red); }
         .text-cyberpunk-red { color: var(--bright-red); }
         .bg-cyberpunk-green { background-color: var(--bangladesh-green); }
@@ -39,13 +41,13 @@
         .text-cyberpunk-blue { color: var(--neon-blue); }
         .bg-white { background-color: var(--white); }
         .text-white { color: var(--white); }
-        .bg-black { background-color: var(--black); }
 
         /* Glowing effects */
         .neon-text {
             text-shadow: 0 0 5px var(--bright-red), 0 0 10px var(--bright-red), 0 0 15px var(--bright-red), 0 0 20px var(--bright-red), 0 0 25px var(--bright-red);
         }
 
+        /* Glowing borders */
         .neon-border {
             border: 2px solid var(--bright-red);
             box-shadow: 0 0 10px var(--bright-red), 0 0 20px var(--bright-red);
@@ -142,7 +144,7 @@
 <body class="min-h-screen flex flex-col items-center p-4 bg-black">
 
 <main class="w-full h-full flex flex-col items-center">
-    <header class="text-center p-6 md:p-10 w-full scout-purple-gradient rounded-3xl shadow-2xl header-bg-animation flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
+    <header class="text-center p-6 md:p-10 w-full bg-gradient-to-r from-red-500 to-green-500 rounded-3xl shadow-2xl header-bg-animation flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
         <img src="logo.png" alt="ICT Scout Jamboree 2025 Logo" class="h-24 w-auto object-contain mb-4 md:mb-0">
         <div class="flex flex-col items-center md:items-start text-white">
             <h1 class="text-4xl lg:text-5xl font-extrabold tracking-wide neon-glow font-heading">Bangladesh Scouts</h1>
@@ -195,4 +197,31 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyberpunk-blue mr-3 mt-1 flex-shrink-0" fill="none" viewBox="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span class="text-dark-grey text-base">Meet new friends and build lasting
+                <span class="text-dark-grey text-base">Meet new friends and build lasting connections.</span>
+            </li>
+        </ul>
+
+        <div class="flex flex-col md:flex-row justify-center items-center mt-6 space-y-4 md:space-y-0 md:space-x-8">
+            <a href="https://www.facebook.com/share/16ypNQm7uG/" target="_blank" class="link-button bg-cyberpunk-blue text-white font-semibold py-3 px-8 rounded-full hover:bg-light-blue">
+                Check out the Event Page
+            </a>
+            <a href="https://www.facebook.com/bangladeshscouts.NHQ" target="_blank" class="link-button bg-cyberpunk-blue text-white font-semibold py-3 px-8 rounded-full hover:bg-light-blue">
+                Visit our Facebook Page
+            </a>
+        </div>
+    </section>
+
+    <!-- Image Cropping System -->
+
+</main>
+
+<footer class="mt-12 w-full text-center text-sm text-dark-grey p-4">
+    <p>© Media Cell, 3rd National ICT Scout Jamboree 2025</p>
+</footer>
+
+<script>
+    // JavaScript for the photo cropping system, zooming, and interactivity
+</script>
+
+</body>
+</html>
